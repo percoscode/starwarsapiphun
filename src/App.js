@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
 
-const urls = [
-	// "https://jsonplaceholder.typicode.com/users",
-	// "https://jsonplaceholder.typicode.com/posts",
-  // "https://jsonplaceholder.typicode.com/albums",
-  "https://swapi.co/api/vehicles/?format=json"
-]
+// const urls = [
+// 	"https://jsonplaceholder.typicode.com/users",
+// 	"https://jsonplaceholder.typicode.com/posts",
+//   "https://jsonplaceholder.typicode.com/albums",
+//   "https://swapi.co/api/vehicles/?format=json"
+// ]
 
 // example from ZTM
 // const getData1 = async function() {
@@ -22,12 +22,18 @@ const urls = [
 // 	}
 // }
 
-// hits api, but logs vars as undefined
+// hits api, but still working on getting correct variables
+const urls = [
+  "https://swapi.co/api/vehicles/?format=json"
+]
+
 const getData = async () => {
   try {
-    const [ name, model, manufacturer ] = await Promise.all(urls.map(url =>
+    const arr = await Promise.all(urls.map(url =>
       fetch(url).then(resp => resp.json())
       ))
+    console.log(arr[0].results)
+    const { name, model, manufacturer } = arr[0].results[0]
     console.log('name', name)
     console.log('model', model)
     console.log('manufacturer', manufacturer)
@@ -37,6 +43,7 @@ const getData = async () => {
     console.log('nobody died')
   }
 }
+
 
 class App extends React.Component {
   constructor() {
