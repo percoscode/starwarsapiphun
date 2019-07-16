@@ -1,49 +1,33 @@
 import React from 'react';
 import './App.css';
 
-// const urls = [
-// 	"https://jsonplaceholder.typicode.com/users",
-// 	"https://jsonplaceholder.typicode.com/posts",
-//   "https://jsonplaceholder.typicode.com/albums",
-//   "https://swapi.co/api/vehicles/?format=json"
-// ]
-
-// example from ZTM
-// const getData1 = async function() {
-// 	try {
-// 		const [ users, posts, albums ] = await Promise.all(urls.map(url => 
-// 			fetch(url).then(resp => resp.json())
-// 		))
-// 		console.log('users', users)
-// 		console.log('posts', posts)
-// 		console.log('albums', albums)
-// 	} catch (err) {
-// 		console.log('oofda', err)
-// 	}
-// }
-
-// hits api, but still working on getting correct variables
 const urls = [
   "https://swapi.co/api/vehicles/?format=json"
 ]
 
+let currentData = {}
+
 const getData = async () => {
   try {
-    const arr = await Promise.all(urls.map(url =>
-      fetch(url).then(resp => resp.json())
-      ))
-    console.log(arr[0].results)
-    const { name, model, manufacturer } = arr[0].results[0]
-    console.log('name', name)
-    console.log('model', model)
-    console.log('manufacturer', manufacturer)
+    let response = await fetch(urls[0]);
+    response = await response.json();
+    let i = 0;
+    let apiResponse = {}
+    response.results.forEach(vehicles => {
+      let vehicle = {}
+      vehicle["name"] = response.results[i].name
+      vehicle["model"] = response.results[i].model
+      vehicle["manufacturer"] = response.results[i].manufacturer
+      apiResponse[i] = vehicle
+      i++
+    })
+    currentData = apiResponse
   } catch (err) {
-    console.log('oofda', err)
+    console.log('error', err)
   } finally {
-    console.log('nobody died')
+    console.log(currentData)
   }
 }
-
 
 class App extends React.Component {
   constructor() {
@@ -52,7 +36,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    console.log('working')
+    // console.log('working')
     getData()
   }
 
